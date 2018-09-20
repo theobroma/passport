@@ -7,7 +7,8 @@ import bodyParser from 'body-parser';
 import cookieSession from 'cookie-session';
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-import GoogleStrategy from 'passport-google-oauth20';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as LocalStrategy } from 'passport-local';
 
 import './env';
 // import { connect } from './db';
@@ -58,6 +59,19 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 // same port as client use http://localhost:3000
 app.use('*', cors({ origin: 'http://localhost:3000' }));
+
+passport.use(
+  'local-login',
+  new LocalStrategy(
+    {
+      // by default, local strategy uses username and password, we will override with email
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true // allows us to pass back the entire request to the callback
+    },
+    ((req, email, password, done) => {})
+  )
+);
 
 passport.use(
   new GitHubStrategy(

@@ -6,11 +6,25 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+router.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
 // auth logout
 router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
 });
+
+// process the signup form
+router.post(
+  '/signup',
+  passport.authenticate('local-login', {
+    successRedirect: '/profile', // redirect to the secure profile section
+    failureRedirect: '/signup', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+  })
+);
 
 router.get(
   '/github',
