@@ -1,0 +1,44 @@
+[
+  {
+    "code": "function(a,b){return a+b;}",
+    "question": "What is printed in the console?",
+    "answers": ["true", "false", "ReferenceError"],
+    "correctAnswerData": 0,
+    "timeBudget": 60
+  },
+  {
+    "code": "Number('1') - 1 == 0;",
+    "question": "What is printed in the console?",
+    "answers": ["true", "false", "ReferenceError"],
+    "correctAnswerData": 0,
+    "timeBudget": 60
+  },
+  {
+    "code": "(true + false) > 2 + true;",
+    "question": "What is printed in the console?",
+    "answers": ["true", "false", "ReferenceError"],
+    "correctAnswerData": 0,
+    "timeBudget": 60
+  },
+  {
+    "code": "'1' - - '1';",
+    "question": "What is printed in the console?",
+    "answers": ["true", "false", "ReferenceError"],
+    "correctAnswerData": 0,
+    "timeBudget": 60
+  },
+  {
+    "code": "'This is a string' instanceof String;",
+    "question": "What is printed in the console?",
+    "answers": ["true", "false", "ReferenceError"],
+    "correctAnswerData": 0,
+    "timeBudget": 60
+  },
+  {
+    "code": "NaN === NaN",
+    "question": "What is printed in the console?",
+    "answers": ["true", "false", "ReferenceError"],
+    "correctAnswerData": 0,
+    "timeBudget": 60
+  }
+]
