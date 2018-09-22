@@ -17,15 +17,13 @@ import db from './db/postgres';
 import authRoutes from './routes/auth-routes';
 import todosRoutes from './routes/todos-routes';
 import profileRoutes from './routes/profile-routes';
+import apiRoutes from './routes/api-routes';
 
 const keys = require('../config/keys');
 // import passportSetup from './config/passport-setup';
 
 const app = express();
 
-// console.log('clientID', process.env.clientID);
-// console.log('clientSecret', process.env.clientSecret);
-// console.log('callbackURL', process.env.callbackURL);
 // 3000 used by webpack dev server
 app.set('port', process.env.PORT || 3001);
 /*
@@ -69,59 +67,7 @@ passport.use(
       passwordField: 'password',
       passReqToCallback: true // allows us to pass back the entire request to the callback
     },
-    ((req, email, password, done) => {})
-  )
-);
-
-passport.use(
-  new GitHubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL
-    },
-    (accessToken, refreshToken, profile, done) => {
-      console.log(accessToken);
-      console.log(refreshToken);
-      console.log(profile);
-      // User.findOrCreate({ githubId: profile.id }, (err, user) => done (err, user));
-    }
-  )
-);
-
-passport.use(
-  new GoogleStrategy(
-    {
-      // options for google strategy
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL
-    },
-    (accessToken, refreshToken, profile, done) => {
-      // console.log(accessToken);
-      // console.log(refreshToken);
-      console.log(profile);
-      // check if user already exists in our own db
-      // User.findOne({ googleId: profile.id }).then((currentUser) => {
-      //   if (currentUser) {
-      //     // already have this user
-      //     console.log('user is: ', currentUser);
-      //     done(null, currentUser);
-      //   } else {
-      //     // if not, create user in our db
-      //     new User({
-      //       googleId: profile.id,
-      //       username: profile.displayName,
-      //       thumbnail: profile._json.image.url
-      //     })
-      //       .save()
-      //       .then((newUser) => {
-      //         console.log('created new user: ', newUser);
-      //         done(null, newUser);
-      //       });
-      //   }
-      // });
-    }
+    (req, email, password, done) => {}
   )
 );
 
@@ -129,6 +75,7 @@ passport.use(
 // All routes in the end
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
+app.use('/api', apiRoutes);
 // app.use('/todos', todosRoutes);
 
 // create home route
