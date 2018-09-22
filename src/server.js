@@ -53,6 +53,16 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  // User.findById(id, (err, user) => {
+  //   err ? done(err) : done(null, user);
+  // });
+});
+
 app.use(express.static(path.join(__dirname, 'static')));
 
 // same port as client use http://localhost:3000
@@ -67,7 +77,11 @@ passport.use(
       passwordField: 'password',
       passReqToCallback: true // allows us to pass back the entire request to the callback
     },
-    (req, email, password, done) => {}
+    (req, email, password, done) => {
+      console.log(req);
+      console.log(email);
+      console.log(password);
+    }
   )
 );
 
