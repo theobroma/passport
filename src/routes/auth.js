@@ -19,6 +19,10 @@ router.get('/signup', (req, res) => {
   res.render('signup');
 });
 
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
 router.post('/register', authHelpers.loginRedirect, (req, res, next) => authHelpers
     .createUser(req, res)
     .then((response) => {
