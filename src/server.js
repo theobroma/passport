@@ -15,10 +15,10 @@ import './env';
 // import { connect } from './db';
 import db from './db/postgres';
 
-import authRoutes from './routes/auth-routes';
+import authRoutes from './routes/auth';
 import todosRoutes from './routes/todos-routes';
-import profileRoutes from './routes/profile-routes';
-import apiRoutes from './routes/api-routes';
+import profileRoutes from './routes/profile';
+import apiRoutes from './routes/api';
 
 const keys = require('../config/keys');
 // import passportSetup from './config/passport-setup';
@@ -54,18 +54,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash()); // use connect-flash for flash messages stored in session
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-  console.log(user);
-});
-
-passport.deserializeUser((id, done) => {
-  console.log(id);
-  // User.findById(id, (err, user) => {
-  //   err ? done(err) : done(null, user);
-  // });
-});
 
 app.use(express.static(path.join(__dirname, 'static')));
 

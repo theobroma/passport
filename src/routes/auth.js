@@ -1,6 +1,9 @@
-import passport from 'passport';
+// import passport from 'passport';
 
 const router = require('express').Router();
+
+const authHelpers = require('../auth/_helpers');
+const passport = require('../auth/local');
 
 router.get('/login', (req, res) => {
   res.render('login');
@@ -15,6 +18,19 @@ router.get('/logout', (req, res) => {
 router.get('/signup', (req, res) => {
   res.render('signup');
 });
+
+router.post('/register', authHelpers.loginRedirect, (req, res, next) => authHelpers
+    .createUser(req, res)
+    .then((response) => {
+      passport.authenticate('local', (err, user, info) => {
+        if (user) {
+          handleResponse(res, 200, 'success');
+        }
+      })(req, res, next);
+    })
+    .catch((err) => {
+      handleResponse(res, 500, 'error');
+    }));
 
 // process the signup form
 router.post(
@@ -33,5 +49,9 @@ router.post(
     failureFlash: true // allow flash messages
   })
 );
+// *** helpers *** //
+function handleResponse(res, code, statusMsg) {
+  res.status(code).json({ status: statusMsg });
+}
 
 module.exports = router;
