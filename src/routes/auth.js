@@ -36,6 +36,25 @@ router.post('/register', authHelpers.loginRedirect, (req, res, next) => authHelp
       handleResponse(res, 500, 'error');
     }));
 
+router.post('/login', authHelpers.loginRedirect, (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      handleResponse(res, 500, 'error');
+    }
+    if (!user) {
+      handleResponse(res, 404, 'User not found');
+    }
+    if (user) {
+      req.logIn(user, (err) => {
+        if (err) {
+          handleResponse(res, 500, 'error');
+        }
+        handleResponse(res, 200, 'success');
+      });
+    }
+  })(req, res, next);
+});
+
 // process the signup form
 router.post(
   '/signup',

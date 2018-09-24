@@ -21,6 +21,7 @@ import db from './db/postgres';
 import authRoutes from './routes/auth';
 import todosRoutes from './routes/todos-routes';
 import profileRoutes from './routes/profile';
+import userRoutes from './routes/user';
 import apiRoutes from './routes/api';
 
 const keys = require('../config/keys');
@@ -71,6 +72,7 @@ app.use('*', cors({ origin: 'http://localhost:3000' }));
 app.use('/auth', authRoutes);
 app.use('/profile', profileRoutes);
 app.use('/api', apiRoutes);
+app.use('/', userRoutes);
 // app.use('/todos', todosRoutes);
 
 // create home route
