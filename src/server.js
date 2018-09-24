@@ -5,8 +5,11 @@ import mongoose from 'mongoose';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cookieSession from 'cookie-session';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import flash from 'connect-flash';
 import passport from 'passport';
+import nunjucks from 'nunjucks';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as LocalStrategy } from 'passport-local';
@@ -34,56 +37,34 @@ app.set('port', process.env.PORT || 3001);
  */
 
 // connect();
+const viewFolders = [path.join(__dirname, '..', 'views')];
+
+nunjucks.configure(viewFolders, {
+  express: app,
+  autoescape: true
+});
+app.set('view engine', 'html');
 
 app.use(morgan('dev'));
+app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// set up vidw engine
-app.set('view engine', 'ejs');
-
-// set up session cookies
+app.use(bodyParser.urlencoded({ extended: false }));
+// uncomment if using express-session
 app.use(
-  cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [keys.session.cookieKey]
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true
   })
 );
-
-// initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(flash());
 
 app.use(express.static(path.join(__dirname, 'static')));
 
 // same port as client use http://localhost:3000
 app.use('*', cors({ origin: 'http://localhost:3000' }));
-
-passport.use(
-  'local-login',
-  new LocalStrategy(
-    {
-      // by default, local strategy uses username and password, we will override with email
-      usernameField: 'email',
-      passwordField: 'password',
-      passReqToCallback: true // allows us to pass back the entire request to the callback
-    },
-    (req, email, password, done) => {
-      console.log('LocalStrategy=====');
-      console.log(email);
-      console.log(password);
-      console.log('LocalStrategy=====');
-      db
-        .insert({
-          email: 'theobroma333@gmail.com',
-          password: '777'
-        })
-        .returning('*')
-        .into('users');
-    }
-  )
-);
 
 // set up routes
 // All routes in the end
@@ -94,7 +75,7 @@ app.use('/api', apiRoutes);
 
 // create home route
 app.get('/', (req, res) => {
-  res.render('home');
+  res.render('index');
 });
 
 app.listen(app.get('port'), () => console.log(`Server is now running on http://localhost:${app.get('port')}`));
