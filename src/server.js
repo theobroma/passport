@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cookieSession from 'cookie-session';
+import flash from 'connect-flash';
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
@@ -52,12 +53,15 @@ app.use(
 // initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
+  console.log(user);
 });
 
 passport.deserializeUser((id, done) => {
+  console.log(id);
   // User.findById(id, (err, user) => {
   //   err ? done(err) : done(null, user);
   // });
@@ -78,9 +82,17 @@ passport.use(
       passReqToCallback: true // allows us to pass back the entire request to the callback
     },
     (req, email, password, done) => {
-      console.log(req);
+      console.log('LocalStrategy=====');
       console.log(email);
       console.log(password);
+      console.log('LocalStrategy=====');
+      db
+        .insert({
+          email: 'theobroma333@gmail.com',
+          password: '777'
+        })
+        .returning('*')
+        .into('users');
     }
   )
 );

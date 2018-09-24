@@ -1,11 +1,13 @@
-exports.up = knex => knex.schema.createTable('users', (table) => {
-  table.bigincrements('id').primary();
-  table.timestamps(false, true);
-  table.string('name').notNullable();
-  table.string('login').notNullable();
-  table.string('email').notNullable();
-  table.string('github_id').notNullable();
-  table.string('access_token').notNullable();
-});
+exports.up = (knex, Promise) => {
+  return knex.schema.createTable('users', (table) => {
+    table.increments();
+    table.string('username').unique().notNullable();
+    table.string('password').notNullable();
+    table.boolean('admin').notNullable().defaultTo(false);
+    table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
+  });
+};
 
-exports.down = knex => knex.schema.dropTableIfExists('users');
+exports.down = (knex, Promise) => {
+  return knex.schema.dropTable('users');
+};
